@@ -2,6 +2,12 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 
+
+
+const booksApis = require("./APIS/booksApis");
+// const userApis = require("./APIS/userApis");
+// const adminApis = require("./APIS/adminApis");
+
 //import mongo client
 const mongoClient = require("mongodb").MongoClient;
 
@@ -26,6 +32,12 @@ mongoClient.connect(dburl, { useNewUrlParser: true, useUnifiedTopology: true }, 
 
 });
 
+app.use('/books',booksApis); 
+// app.use('/user',userApis);
+// app.use('/admin',adminApis);
+
 const port = process.env.PORT || 8080;
-app.listen(port,() => console.log(`server is listening to port ${port}.....`))
+app.listen(port,() => console.log(`server is listening to port ${port}.....`));
+
+
 
