@@ -10,7 +10,7 @@ const login = async (req, res, next) => {
         let credentials = req.body;
         // console.log("credentials = ", credentials.type);
 
-        let collectionObj = credentials.type === "user" ? req.app.get("userCollection") : req.app.get("adminCollection");
+        let collectionObj = credentials.type === "student" || credentials.type === "staff" ? req.app.get("userCollection") : req.app.get("adminCollection");
 
 
         //verify username
@@ -28,7 +28,7 @@ const login = async (req, res, next) => {
 
             let result = await bcryptjs.compare(credentials.password, user.password);
 
-            if (credentials.type === "user") {
+            if (credentials.type === "student" || credentials.type === "staff") {
                 //if password not matched 
                 if (result === false) {
                     res.send({ message: "Invalid password " });

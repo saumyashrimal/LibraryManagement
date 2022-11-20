@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
+const path = require("path");
 require('dotenv').config();
+
+//connecting build of react with server
+app.use(express.static(path.join(__dirname,'./build/')));
+
 
 const booksApis = require("./APIS/booksApis");
 const userApis = require("./APIS/userApis");
@@ -37,6 +42,30 @@ app.use('/books',booksApis);
 app.use('/user',userApis);
 app.use('/request',requestApis);
 // app.use('/admin',adminApis);
+
+//function to solve the issue of refreshing 
+app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, './build/index.html'), function(err) {
+      if (err) {
+        res.status(500).send(err)
+      }
+    })
+  })
+
+//middleware to handle wrong path
+
+app.use((req,res,next) => {
+    res.send({message:`path ${req.url} is invalid`})
+})
+
+
+//handle errors
+app.use((err,req,res,next) => {
+    console.log(err);
+    res.send({message:err.message})
+})
+
+
 
 const port = process.env.PORT || 8080;
 app.listen(port,() => console.log(`server is listening to port ${port}.....`));
