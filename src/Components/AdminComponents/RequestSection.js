@@ -12,10 +12,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
+import {FormControl} from "@mui/material";
+import {InputLabel} from "@mui/material";
+import {Select} from "@mui/material";
+import {MenuItem} from "@mui/material";
 import { Alert } from "@mui/material";
 
 function RequestSection() {
-    axios.defaults.baseURL = "http://localhost:8080";
+  axios.defaults.baseURL = "http://localhost:8080";
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -40,7 +44,7 @@ function RequestSection() {
   let [rollno, setRollNo] = useState("");
   let [requestMade, setRequestMade] = useState();
   let [openNotification, setOpenNotification] = useState(false);
-  let [message,setMessage] = useState("");
+  let [message, setMessage] = useState("");
   useEffect(() => {
     (async () => {
       let res = await axios.get("request/getAllRequests");
@@ -49,42 +53,90 @@ function RequestSection() {
   }, [requestMade]);
   let handleIssueBook = async (data) => {
     // udpate request status
-    let res = await axios.post("/request/issueBook",{
-        reqId: data._id,
-        isbn: data.isbn,
-        newQty: parseInt(data.bookDetails.totalqty) - 1
+    let res = await axios.post("/request/issueBook", {
+      reqId: data._id,
+      isbn: data.isbn,
+      newQty: parseInt(data.bookDetails.totalqty) - 1,
     });
-    if(res.status === 200){
-        setMessage(res?.data?.message);
-        setRequestMade((st) => !st);
+    if (res.status === 200) {
+      setMessage(res?.data?.message);
+      setRequestMade((st) => !st);
     }
   };
-  let handleRejectRequest = async(data) => {
+  let handleRejectRequest = async (data) => {
     // udpate request status
-    let res = await axios.post("/request/rejectRequest",{
-        reqId: data._id,
+    let res = await axios.post("/request/rejectRequest", {
+      reqId: data._id,
     });
-    if(res.status === 200){
-        setMessage(res?.data?.message);
-        setRequestMade((st) => !st);
+    if (res.status === 200) {
+      setMessage(res?.data?.message);
+      setRequestMade((st) => !st);
     }
   };
   let handleUnissueBook = async (data) => {
-    let res = await axios.post("/request/unissueBook",{
-        reqId: data._id,
-        isbn: data.isbn,
-        newQty: parseInt(data.bookDetails.totalqty) + 1
+    let res = await axios.post("/request/unissueBook", {
+      reqId: data._id,
+      isbn: data.isbn,
+      newQty: parseInt(data.bookDetails.totalqty) + 1,
     });
 
-    if(res.status === 200){
-        setMessage(res?.data?.message);
-        setRequestMade((st) => !st);
+    if (res.status === 200) {
+      setMessage(res?.data?.message);
+      setRequestMade((st) => !st);
     }
   };
+
+  let handleSearchByFilter = async () => {
+    let res = await axios.get("request/searchRequest",{params:{
+        rollno: rollno,
+        status: status
+      }} );
+    if(res.status === 200){
+        setRequests(res?.data?.response);
+    }
+    else{
+        setRequests([]);
+    }
+    
+  }
+
   return (
     <ResponsiveDrawer>
       <h1>Request Section</h1>
-      <Box></Box>
+      <Box>
+        <Grid display="flex">
+          <Grid item={true}>
+            <TextField
+              className="textfield"
+              id="Search"
+              label="Search by roll no and Request Status"
+              variant="filled"
+              sx={{ label: { color: "black" } }}
+              value={rollno}
+              onChange={(e) => setRollNo(e.target.value)}
+            />
+          </Grid>
+          <Grid item={true} >
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Select Status Type</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={status}
+                label="Age"
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <MenuItem value="pending">Pending</MenuItem>
+                <MenuItem value="approved">Approved</MenuItem>
+                <MenuItem value="returned">Returned</MenuItem>
+                <MenuItem value="rejected">Rejected</MenuItem>
+                <MenuItem value="deleted">Deleted</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Button variant="filled" onClick={handleSearchByFilter}>Search</Button>
+        </Grid>
+      </Box>
       {Requests?.length > 0 && (
         <Grid>
           <TableContainer component={Paper} sx={{ marginTop: "30px" }}>

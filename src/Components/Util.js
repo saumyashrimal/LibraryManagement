@@ -18,3 +18,4 @@ function validatePhone(number){
 
   export {validateEmail, validatePhone};
 
+

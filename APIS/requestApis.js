@@ -11,8 +11,7 @@ requestApis.use(exp.json());
 requestApis.post("/createRequest", expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
     let bookCollection = req.app.get('bookCollection');
-    let requestObj = {...req.body,};
-    
+    let requestObj = req.body;
     let bookDetails = await bookCollection.findOne({isbn:requestObj.isbn});
     requestObj.bookDetails = bookDetails;
     await requestCollection.insertOne(requestObj);
@@ -52,14 +51,8 @@ requestApis.delete("/deleteRequest", expressErrorHandler(async (req,res) => {
 // search request by roll number - used by admin
 requestApis.get("/searchRequest",  expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
-    let {rollno,status,isbn} = req.query;
-    let requests =  await requestCollection.find( {
-        $or: [
-          { rollno: { $regex: `${rollno}`, $options: "i" } },
-          { status: { $regex: `${status}`, $options: "i" } },
-          { isbn: { $regex: `${isbn}`, $options: "i" } },
-        ],
-      }).toArray();
+    let {rollno,status} = req.query;
+    let requests =  await requestCollection.find({rollno: rollno, status: status}).toArray();
     if(requests.length === 0){
         res.status(404).send({
             message: "No Requests found!"
@@ -109,7 +102,6 @@ requestApis.post("/unissueBook",  expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
     let bookCollection = req.app.get('bookCollection');
     let {reqId, newQty, isbn} = req.body;
-    let currentTime = new Date();
     let objId = new mongodb.ObjectId(reqId);
     requestCollection.updateOne({_id: objId}, {$set: {status: "returned", updateRequestDate: currentTime}});
     await bookCollection.updateOne({isbn:isbn}, {$set: {totalQty: newQty}}); 
@@ -122,9 +114,9 @@ requestApis.post("/unissueBook",  expressErrorHandler(async (req,res) => {
 requestApis.put("/rejectRequest", expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
     let {reqId} = req.body; 
-    let currentTime = new Date();
     let objId = new mongodb.ObjectId(reqId);
-    requestCollection.updateOne({_id: objId}, {$set: {status: "rejected", updateRequestDate: currentTime}});
+    let currentTime = new Date();
+    requestCollection.updateOne({_id: objId}, {$set: {status: "rejected",  updateRequestDate: currentTime}});
     res.status(200).send({
         message: "Book Rejected"
     })
