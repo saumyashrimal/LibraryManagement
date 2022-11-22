@@ -12,6 +12,8 @@ requestApis.post("/createRequest", expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
     let bookCollection = req.app.get('bookCollection');
     let requestObj = req.body;
+    requestObj.requestDate = new Date();
+    requestObj.updateRequestDate = new Date();
     let bookDetails = await bookCollection.findOne({isbn:requestObj.isbn});
     requestObj.bookDetails = bookDetails;
     await requestCollection.insertOne(requestObj);
@@ -89,7 +91,7 @@ requestApis.post("/issueBook",  expressErrorHandler(async (req,res) => {
     let objId = new mongodb.ObjectId(reqId);
     let currentTime = new Date();
     await requestCollection.updateOne({_id: objId}, {$set: {status: "approved", updateRequestDate: currentTime}});
-    await bookCollection.updateOne({isbn:isbn}, {$set: {totalQty: newQty}});
+    await bookCollection.updateOne({isbn:isbn}, {$set: {totalqty: newQty}});
     res.status(200).send({
         message: "Book Issued"
     })
@@ -104,7 +106,7 @@ requestApis.post("/unissueBook",  expressErrorHandler(async (req,res) => {
     let {reqId, newQty, isbn} = req.body;
     let objId = new mongodb.ObjectId(reqId);
     requestCollection.updateOne({_id: objId}, {$set: {status: "returned", updateRequestDate: currentTime}});
-    await bookCollection.updateOne({isbn:isbn}, {$set: {totalQty: newQty}}); 
+    await bookCollection.updateOne({isbn:isbn}, {$set: {totalqty: newQty}}); 
     res.status(200).send({
         message: "Book Returned"
     })

@@ -26,7 +26,7 @@ function ResponsiveDrawer(props) {
     {text: "Dashboard", path: "admin/dashboard"},
     {text : "View Requests", path: "admin/requestSection"},
     {text : "View/Edit/Delete Books", path: "admin/bookSection"},
-    {text : "View all Users", path: "admin/Users"},
+    {text : "View all Users", path: "admin/userSection"},
   ];
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

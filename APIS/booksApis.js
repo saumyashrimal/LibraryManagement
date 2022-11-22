@@ -52,18 +52,19 @@ booksApis.get('/searchBook',expressErrorHandler(async (req,res,next) => {
 }));
 
 // update total Quantity
-booksApis.put('/updateTotalQty',expressErrorHandler(async (req,res,next) => {
+booksApis.put('/updateBook',expressErrorHandler(async (req,res,next) => {
     let Bookscollection = req.app.get("bookCollection");
-    let reqIsbn = req.query.isbn;
-    let qty = req.query.qty;
+    let reqObj = req.body;
+    let {isbn,} = reqObj
     // find the book data from isbn number
-    let book = await Bookscollection.findOne({isbn: reqIsbn});
+    let book = await Bookscollection.findOne({isbn: isbn});
     if(book === null){
         res.status(404).send({
             message: "Book not found!!"
         })
     }
-    await Bookscollection.updateOne({isbn:reqIsbn}, {$set: {totalqty: qty}});
+    delete reqObj._id;
+    await Bookscollection.updateOne({isbn:isbn}, {$set: {...reqObj}});
     res.status(200).send({
         message: "Quantity updated!"
     });
