@@ -42,8 +42,8 @@ userApis.use(exp.json());
  userApis.put("/updateField", expressErrorHandler(async (req,res) => {
     let userCollection = req.app.get("userCollection");
     // type -> name, phone number, email
-    let {type, newValue , rollno} = req.body;
-    await userCollection.updateOne({rollno: rollno} ,{$set: {[`${type}`]: newValue }});
+    let {type, newVal , rollno} = req.body;
+    await userCollection.updateOne({rollno: rollno} ,{$set: {[`${type}`]: newVal }});
     res.status(200).send({
         message: `${type} is updated!`
     });

@@ -29,11 +29,13 @@ mongoClient.connect(dburl, { useNewUrlParser: true, useUnifiedTopology: true }, 
         let bookCollection = databaseObj.collection('bookscollection');
         let userCollection = databaseObj.collection('userCollection');
         let requestCollection = databaseObj.collection('requestCollection');
+        let adminCollection = databaseObj.collection('adminCollection');
 
         // when making api calls - we get the the collections in req object
         app.set('bookCollection', bookCollection);
         app.set('userCollection', userCollection);
         app.set('requestCollection', requestCollection);
+        app.set('adminCollection', adminCollection);
     }
 
 });

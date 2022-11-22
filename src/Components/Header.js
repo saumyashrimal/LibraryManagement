@@ -12,15 +12,36 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { useNavigate } from "react-router-dom";
 
 function PrimaryAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
+  let navigate = useNavigate();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
     const userInfo = JSON.parse(localStorage.getItem("user"));
     console.log("userInfo", userInfo);
     let {name} = userInfo ?? "";
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const userLoginMenu = [
+    {text: "View Profile",
+    path: "user/profile"
+     },
+     {text: "Sign Out",
+      path: "/"
+     },
+
+  ]
+
+  let handleUserProfileClick = (data) => {
+    if(data.text === "Sign Out"){
+      localStorage.clear();
+      navigate(data.path);
+    }
+    navigate(data.path);
+    handleMenuClose();
+  }
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,8 +77,11 @@ function PrimaryAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {userLoginMenu.map((data) => {
+        return (
+          <MenuItem onClick={() => {handleUserProfileClick(data)}}>{data.text}</MenuItem>
+        )
+      })}
     </Menu>
   );
 
@@ -115,7 +139,7 @@ function PrimaryAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="fixed" sx = {{zIndex: 1251 }}>
         <Toolbar>
           <IconButton
             size="large"

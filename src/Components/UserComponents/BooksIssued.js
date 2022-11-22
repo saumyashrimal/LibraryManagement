@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import ResponsiveDrawer from "./UserDrawer";
+import { useLocation } from "react-router-dom";
 
 function BooksIssued() {
   return (
-    <div>BooksIssued</div>
-  )
+    <>
+      <ResponsiveDrawer>
+        <div>BooksIssued</div>
+      </ResponsiveDrawer>
+    </>
+  );
 }
 
-export default BooksIssued
+export default BooksIssued;
