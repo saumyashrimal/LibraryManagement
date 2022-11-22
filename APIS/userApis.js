@@ -157,4 +157,59 @@ userApis.get(
   })
 );
 
+userApis.get("/getDashboardInfo", 
+expressErrorHandler(async (req, res) => {
+    let userCollection = req.app.get("userCollection");
+    let Bookscollection = req.app.get("bookCollection");
+    let requestCollection = req.app.get('requestCollection');
+   
+    let totalStudents = await userCollection.find({type:"student"}).toArray();
+    let totalStaff = await userCollection.find({type:"staff"}).toArray();
+    let totalBooks = await Bookscollection.find().toArray();
+    let totalRequests = await requestCollection.find({status:"pending"}).toArray();
+    
+    totalStudents = totalStudents.length;
+    totalStaff = totalStaff.length;
+    totalRequests = totalRequests.length;
+    totalBooks = totalBooks.length
+    console.log("data",totalBooks,totalStaff,totalRequests,totalStudents);
+    res.status(200).send({
+      response: {
+        totalStudents,
+        totalBooks,
+        totalStaff,
+        totalRequests
+      }
+    });
+  })
+)
+
+userApis.get("/getUserDashboardInfo",expressErrorHandler(async (req, res) => {
+    let requestCollection = req.app.get('requestCollection');
+    let {rollno} = req.query;
+    let totalIssuedBooks = await requestCollection.find({status:"approved" , rollno:rollno}).toArray();
+    let days = 0;
+    totalIssuedBooks.forEach((reqData) => {
+        let currentDate  = new Date();
+        let lastDate = new Date(reqData.updateRequestDate);
+        lastDate.setDate(lastDate.getDate() + 30);
+        let timeDiff = lastDate.getTime()-currentDate.getTime();
+        
+        if(timeDiff < 0 ){
+            days += Math.abs(timeDiff)/(1000*60*60*24);
+        }
+    })
+
+    totalIssuedBooks = totalIssuedBooks.length;
+    totalFine = days*5;
+    console.log("data",totalIssuedBooks,totalFine);
+    res.status(200).send({
+      response: {
+        totalIssuedBooks,
+        totalFine
+      }
+    });
+  }))
+
+
 module.exports = userApis;

@@ -1,41 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ResponsiveDrawer from "./UserDrawer";
 import { Box } from "@mui/material";
+import axios from "axios";
 
-function UserDashboard(props) {
-  let userInfo = JSON.parse(localStorage.getItem("user"));
-  let { issuedBooks } = userInfo;
+function UserDashboard() {
+  axios.defaults.baseURL = "http://localhost:8080";
+  let [data, setData] = useState(null);
+  const userInfo = JSON.parse(localStorage.getItem("user"));
+  useEffect(() => {
+    (async () => {
+      let data = await axios.get("user/getUserDashboardInfo",{params:{
+        rollno: userInfo.rollno
+      }});
+      setData(data?.data?.response);
+    })();
+  }, []);
 
   return (
     <>
       <ResponsiveDrawer>
-        <Box
-          sx={{
-            backgroundColor: "blue",
-            color: "white",
-            marginBottom: "10px",
-            border: "1px solid black",
-            borderRadius: "100px",
-            padding: "10px",
-            width: "40%",
-            textAlign: "center",
-          }}
-        >
-          <h5>TOTAL BOOKS ISSUED - {issuedBooks.length}</h5>
-        </Box>
-        <Box
-          sx={{
-            backgroundColor: "blue",
-            color: "white",
-            border: "1px solid black",
-            borderRadius: "100px",
-            padding: "10px",
-            width: "40%",
-            textAlign: "center",
-          }}
-        >
-          <h5>TOTAL FIINE - </h5>
-        </Box>
+        {data && (
+          <>
+            <Box
+              sx={{
+                backgroundColor: "blue",
+                color: "white",
+                marginBottom: "10px",
+                border: "1px solid black",
+                borderRadius: "100px",
+                padding: "10px",
+                width: "40%",
+                textAlign: "center",
+              }}
+            >
+              <h5>TOTAL BOOKS ISSUED - {data.totalIssuedBooks}</h5>
+            </Box>
+            <Box
+              sx={{
+                backgroundColor: "blue",
+                color: "white",
+                border: "1px solid black",
+                borderRadius: "100px",
+                padding: "10px",
+                width: "40%",
+                textAlign: "center",
+              }}
+            >
+              <h5>TOTAL FINE -{data.totalFine} </h5>
+            </Box>
+          </>
+        )}
       </ResponsiveDrawer>
     </>
   );
