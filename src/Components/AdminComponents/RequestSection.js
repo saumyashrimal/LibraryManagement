@@ -111,20 +111,21 @@ function RequestSection() {
               id="Search"
               label="Search by roll no and Request Status"
               variant="filled"
-              sx={{ label: { color: "black" } }}
+              sx={{ label: { color: "black" } , minWidth:400}}
               value={rollno}
               onChange={(e) => setRollNo(e.target.value)}
             />
           </Grid>
-          <Grid item={true} >
-            <FormControl fullWidth>
+          <Grid item={true} ml={3}>
+            <FormControl style={{minWidth: 200}}>
               <InputLabel id="demo-simple-select-label">Select Status Type</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={status}
-                label="Age"
+                label="Select the Status"
                 onChange={(e) => setStatus(e.target.value)}
+                sx={{background:"blue",color:"white"}}
               >
                 <MenuItem value="pending">Pending</MenuItem>
                 <MenuItem value="approved">Approved</MenuItem>
@@ -134,7 +135,7 @@ function RequestSection() {
               </Select>
             </FormControl>
           </Grid>
-          <Button variant="filled" onClick={handleSearchByFilter}>Search</Button>
+          <Button variant="filled" sx={{backgroundColor:"blue", color:"white", marginLeft:"20px"}} onClick={handleSearchByFilter}>Search</Button>
         </Grid>
       </Box>
       {Requests?.length > 0 && (
@@ -161,7 +162,7 @@ function RequestSection() {
                       {data.bookDetails.bookname}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {data.requestDate}
+                      {new Date(data.requestDate).toLocaleDateString()}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {data.rollno}

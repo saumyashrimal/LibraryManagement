@@ -7,6 +7,7 @@ function UserDashboard() {
   axios.defaults.baseURL = "http://localhost:8080";
   let [data, setData] = useState(null);
   const userInfo = JSON.parse(localStorage.getItem("user"));
+  let usertype = userInfo.type;
   useEffect(() => {
     (async () => {
       let data = await axios.get("user/getUserDashboardInfo",{params:{
@@ -35,7 +36,7 @@ function UserDashboard() {
             >
               <h5>TOTAL BOOKS ISSUED - {data.totalIssuedBooks}</h5>
             </Box>
-            <Box
+            {usertype === "student" && <Box
               sx={{
                 backgroundColor: "blue",
                 color: "white",
@@ -47,7 +48,7 @@ function UserDashboard() {
               }}
             >
               <h5>TOTAL FINE -{data.totalFine} </h5>
-            </Box>
+            </Box>}
           </>
         )}
       </ResponsiveDrawer>

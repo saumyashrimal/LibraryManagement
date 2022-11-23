@@ -112,7 +112,7 @@ function Register(props) {
           <Grid item={true} mb={4} sx={{ display: "flex" }}>
             <Grid item={true} md={6} mr={3}>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                Roll No
+                Roll No/ Employee Id
               </Typography>
               <TextField
                 className="textfield"

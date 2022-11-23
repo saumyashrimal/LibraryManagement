@@ -54,7 +54,7 @@ requestApis.delete("/deleteRequest", expressErrorHandler(async (req,res) => {
 requestApis.get("/searchRequest",  expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
     let {rollno,status} = req.query;
-    let requests =  await requestCollection.find({rollno: rollno, status: status}).toArray();
+    let requests =  await requestCollection.find({rollno: rollno, status: status}).sort({requestDate:-1}).toArray();
     if(requests.length === 0){
         res.status(404).send({
             message: "No Requests found!"
@@ -70,7 +70,7 @@ requestApis.get("/searchRequest",  expressErrorHandler(async (req,res) => {
 // get all requests 
 requestApis.get("/getAllRequests",  expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
-    let requests =  await requestCollection.find().toArray();
+    let requests =  await requestCollection.find().sort({requestDate:-1}).toArray();
     if(requests.length === 0){
         res.status(404).send({
             message: "No Requests found!"

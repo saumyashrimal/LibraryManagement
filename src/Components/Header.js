@@ -20,7 +20,7 @@ function PrimaryAppBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
     const userInfo = JSON.parse(localStorage.getItem("user"));
     console.log("userInfo", userInfo);
-    let {name} = userInfo ?? "";
+    let {name, type} = userInfo ?? "";
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -32,6 +32,11 @@ function PrimaryAppBar() {
       path: "/"
      },
 
+  ]
+  const adminLoginMenu = [
+    {text: "Sign Out",
+    path: "/"
+   }
   ]
 
   let handleUserProfileClick = (data) => {
@@ -77,7 +82,7 @@ function PrimaryAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {userLoginMenu.map((data) => {
+      {(type === "admin" ? adminLoginMenu : userLoginMenu).map((data) => {
         return (
           <MenuItem onClick={() => {handleUserProfileClick(data)}}>{data.text}</MenuItem>
         )

@@ -84,7 +84,7 @@ function BooksIssued() {
                       {data.bookDetails.totalqty}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {data.updateRequestDate}
+                      {new Date(data.updateRequestDate).toLocaleDateString()}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}

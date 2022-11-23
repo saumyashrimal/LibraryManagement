@@ -15,6 +15,7 @@ import EditModal from "../EditModal";
 
 function ProfilePage() {
   let userInfo = JSON.parse(localStorage.getItem("user"));
+  let usertype = userInfo.type
   let [editModalProps, setEditModalProps] = useState();
   axios.defaults.baseURL = 'http://localhost:8080';
   let [openModal, setOpenModal] = useState();
@@ -112,7 +113,7 @@ function ProfilePage() {
                       borderRadius: "100px",
                     }}
                   >
-                    Roll No{" "}
+                    {usertype === "student" ? "Roll No" : "EMPLOYEE ID" }
                   </Typography>
                 </TableCell>
                 <TableCell align="center">

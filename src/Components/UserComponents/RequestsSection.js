@@ -117,7 +117,7 @@ function RequestsSection() {
                         {data.bookDetails.bookname}
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        {data.requestDate}
+                        {new Date(data.requestDate).toLocaleDateString()}
                       </StyledTableCell>
                       <StyledTableCell align="center">
                         <Button
