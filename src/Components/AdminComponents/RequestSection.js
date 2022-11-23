@@ -50,7 +50,7 @@ function RequestSection() {
       let res = await axios.get("request/getAllRequests");
       setRequests(res?.data?.response);
     })();
-  }, []);
+  }, [requestMade]);
   let handleIssueBook = async (data) => {
     // udpate request status
     let res = await axios.post("/request/issueBook", {
@@ -93,9 +93,6 @@ function RequestSection() {
       }} );
     if(res.status === 200){
         setRequests(res?.data?.response);
-    }
-    else{
-        setRequests([]);
     }
     
   }
