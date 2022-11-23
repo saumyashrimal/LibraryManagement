@@ -50,7 +50,7 @@ function RequestSection() {
       let res = await axios.get("request/getAllRequests");
       setRequests(res?.data?.response);
     })();
-  }, [requestMade]);
+  }, []);
   let handleIssueBook = async (data) => {
     // udpate request status
     let res = await axios.post("/request/issueBook", {
@@ -103,6 +103,7 @@ function RequestSection() {
   return (
     <ResponsiveDrawer>
       <h1>Request Section</h1>
+      
       <Box>
         <Grid display="flex">
           <Grid item={true}>
@@ -138,6 +139,7 @@ function RequestSection() {
           <Button variant="filled" sx={{backgroundColor:"blue", color:"white", marginLeft:"20px"}} onClick={handleSearchByFilter}>Search</Button>
         </Grid>
       </Box>
+      {Requests.length === 0 && <NoDataFound sx={{ marginTop: "30px" }}></NoDataFound>}
       {Requests?.length > 0 && (
         <Grid>
           <TableContainer component={Paper} sx={{ marginTop: "30px" }}>

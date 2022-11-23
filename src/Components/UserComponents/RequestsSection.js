@@ -64,10 +64,7 @@ function RequestsSection() {
     if(res.status === 200){
       setMessage("Request Deleted!");
       setOpenNotification(true);
-      setTimeout(() => {
-        setOpenNotification(false);
-        setRequestMade(true);
-      },500);
+      window.location.reload();
     }
   };
 

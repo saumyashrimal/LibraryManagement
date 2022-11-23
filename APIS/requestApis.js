@@ -55,11 +55,6 @@ requestApis.get("/searchRequest",  expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
     let {rollno,status} = req.query;
     let requests =  await requestCollection.find({rollno: rollno, status: status}).sort({requestDate:-1}).toArray();
-    if(requests.length === 0){
-        res.status(404).send({
-            message: "No Requests found!"
-        })
-    }
     res.status(200).send({
         message:"Requests Found",
         response: requests
@@ -71,11 +66,6 @@ requestApis.get("/searchRequest",  expressErrorHandler(async (req,res) => {
 requestApis.get("/getAllRequests",  expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
     let requests =  await requestCollection.find().sort({requestDate:-1}).toArray();
-    if(requests.length === 0){
-        res.status(404).send({
-            message: "No Requests found!"
-        })
-    }
     res.status(200).send({
         message:"Requests Found",
         response: requests
