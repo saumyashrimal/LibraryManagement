@@ -65,7 +65,7 @@ function RequestSection() {
   };
   let handleRejectRequest = async (data) => {
     // udpate request status
-    let res = await axios.post("/request/rejectRequest", {
+    let res = await axios.post("request/rejectRequest", {
       reqId: data._id,
     });
     if (res.status === 200) {

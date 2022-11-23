@@ -103,7 +103,7 @@ requestApis.post("/unissueBook",  expressErrorHandler(async (req,res) => {
 }));
 
 //Reject Request
-requestApis.put("/rejectRequest", expressErrorHandler(async (req,res) => {
+requestApis.post("/rejectRequest", expressErrorHandler(async (req,res) => {
     let requestCollection = req.app.get('requestCollection');
     let {reqId} = req.body; 
     let objId = new mongodb.ObjectId(reqId);
